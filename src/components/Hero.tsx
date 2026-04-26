@@ -1,6 +1,9 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { ScrubSequence } from "@/components/ScrubSequence";
 import { FRAMES_PATH, FRAME_COUNT } from "@/lib/constants";
+import { BlurText } from "@/components/BlurText";
+import { ArrowUpRight } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
 import React from "react";
 
 type HeroProps = {
@@ -13,57 +16,66 @@ export function Hero({ scrollRef }: HeroProps) {
     offset: ["start start", "end end"]
   });
 
-  // Gestão
-  const opacity1 = useTransform(scrollYProgress, [0, 0.15, 0.25], [1, 1, 0]);
-  const y1 = useTransform(scrollYProgress, [0, 0.15, 0.25], [0, 0, -50]);
-  
-  // Estratégia
-  const opacity2 = useTransform(scrollYProgress, [0.25, 0.4, 0.5], [0, 1, 0]);
-  const y2 = useTransform(scrollYProgress, [0.25, 0.4, 0.5], [50, 0, -50]);
-
-  // Tração
-  const opacity3 = useTransform(scrollYProgress, [0.5, 0.65, 0.75], [0, 1, 0]);
-  const y3 = useTransform(scrollYProgress, [0.5, 0.65, 0.75], [50, 0, -50]);
-
-  // Escalabilidade
-  const opacity4 = useTransform(scrollYProgress, [0.75, 0.9, 1], [0, 1, 1]);
-  const y4 = useTransform(scrollYProgress, [0.75, 0.9, 1], [50, 0, 0]);
+  const textOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
+  const textY       = useTransform(scrollYProgress, [0, 0.3], [0, -80]);
+  const badgeScale  = useTransform(scrollYProgress, [0, 0.15], [1, 0.9]);
 
   return (
-    <section ref={scrollRef as any} className="relative h-[400vh] bg-background">
-      <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
+    <section ref={scrollRef as any} className="relative h-[300vh] bg-background">
+      <div className="sticky top-0 h-screen overflow-hidden">
         
-        {/* Frame Sequence Animation (EZgif frames) */}
+        {/* Frame Sequence */}
         <div className="absolute inset-0 z-0">
           <ScrubSequence framesPath={FRAMES_PATH} frameCount={FRAME_COUNT} scrollTargetRef={scrollRef as any} />
         </div>
 
-        {/* Dark radial glow to blend the text with the video */}
-        <div className="absolute inset-0 z-[1] bg-[radial-gradient(120%_80%_at_50%_60%,transparent_40%,rgba(0,0,0,0.55)_100%)]" />
+        {/* Cinematic vignette */}
+        <div className="absolute inset-0 z-[1] bg-[radial-gradient(ellipse_at_center,transparent_30%,hsl(var(--background))_100%)]" />
+        
+        {/* Bottom fade */}
+        <div className="absolute bottom-0 inset-x-0 h-[45vh] z-[2] gradient-fade-b" />
+        
+        {/* Content */}
+        <motion.div 
+          style={{ opacity: textOpacity, y: textY }}
+          className="absolute inset-0 z-10 flex flex-col items-start justify-end pb-[15vh] px-[var(--gutter)] max-w-[var(--max)] mx-auto"
+        >
+          {/* Badge */}
+          <motion.div style={{ scale: badgeScale }}>
+            <div className="liquid-glass rounded-full px-1 py-1 inline-flex items-center gap-2 mb-8">
+              <span className="bg-primary text-primary-foreground rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wider">Novo</span>
+              <span className="pr-3 text-sm text-foreground/70 font-body">Seu HUB de soluções integradas</span>
+            </div>
+          </motion.div>
 
-        {/* Scrolling Texts */}
-        <motion.div style={{ opacity: opacity1, y: y1 }} className="absolute z-20 pointer-events-none text-center px-6 mt-64 md:mt-80">
-          <h2 className="font-display uppercase text-5xl md:text-7xl tracking-tight text-foreground">Gestão</h2>
-          <p className="font-body text-foreground/60 mt-4 text-lg md:text-xl max-w-[30ch]">O controle absoluto do seu tabuleiro.</p>
+          <BlurText
+            text="Conectando você ao sucesso."
+            as="h1"
+            className="font-display uppercase text-[clamp(48px,8vw,120px)] leading-[0.88] tracking-[-0.03em] text-foreground max-w-[12ch]"
+            delay={0.08}
+            startDelay={0.1}
+          />
+
+          <p className="font-body text-foreground/50 mt-6 text-base md:text-lg max-w-md leading-relaxed">
+            Gestão, estratégia, tração e escalabilidade para o seu negócio dominar o mercado.
+          </p>
+
+          <div className="mt-10 flex items-center gap-4">
+            <a href="#contato" className={buttonVariants({ variant: "hero" })}>
+              Falar com Especialista <ArrowUpRight className="ml-1.5 size-4" />
+            </a>
+          </div>
         </motion.div>
 
-        <motion.div style={{ opacity: opacity2, y: y2 }} className="absolute z-20 pointer-events-none text-center px-6 mt-64 md:mt-80">
-          <h2 className="font-display uppercase text-5xl md:text-7xl tracking-tight text-foreground">Estratégia</h2>
-          <p className="font-body text-foreground/60 mt-4 text-lg md:text-xl max-w-[30ch]">Antecipe os movimentos do mercado.</p>
-        </motion.div>
-
-        <motion.div style={{ opacity: opacity3, y: y3 }} className="absolute z-20 pointer-events-none text-center px-6 mt-64 md:mt-80">
-          <h2 className="font-display uppercase text-5xl md:text-7xl tracking-tight text-foreground">Tração</h2>
-          <p className="font-body text-foreground/60 mt-4 text-lg md:text-xl max-w-[30ch]">Acelere com base sólida e previsível.</p>
-        </motion.div>
-
-        <motion.div style={{ opacity: opacity4, y: y4 }} className="absolute z-20 pointer-events-none text-center px-6 mt-64 md:mt-80">
-          <h2 className="font-display uppercase text-5xl md:text-7xl tracking-tight text-foreground">Escalabilidade</h2>
-          <p className="font-body text-foreground/60 mt-4 text-lg md:text-xl max-w-[30ch]">Cresça sem limites. Seu próximo xeque-mate.</p>
-        </motion.div>
-
-        {/* Transition fade to next section */}
-        <div className="absolute bottom-0 inset-x-0 h-[20vh] z-30 bg-gradient-to-t from-background to-transparent" />
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2">
+          <span className="text-[10px] uppercase tracking-[0.3em] text-foreground/30 font-body">Scroll</span>
+          <motion.div 
+            className="w-px h-8 bg-gradient-to-b from-primary/60 to-transparent"
+            animate={{ scaleY: [1, 0.5, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </div>
       </div>
     </section>
   );

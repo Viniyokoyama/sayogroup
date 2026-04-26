@@ -14,10 +14,11 @@ export default function App() {
   
   return (
     <>
-      {/* Ambient Background Glows */}
+      {/* Ambient Background Orbs */}
       <div className="fixed inset-0 pointer-events-none z-[-10] overflow-hidden">
-        <div className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-primary/10 blur-[140px] mix-blend-screen" />
-        <div className="absolute top-[40%] right-[-20%] w-[60vw] h-[60vw] rounded-full bg-primary/5 blur-[140px] mix-blend-screen" />
+        <div className="absolute top-[-15%] left-[-5%] w-[45vw] h-[45vw] rounded-full bg-primary/[0.07] blur-[180px] animate-pulse-glow" />
+        <div className="absolute top-[50%] right-[-15%] w-[50vw] h-[50vw] rounded-full bg-primary/[0.04] blur-[180px] animate-pulse-glow [animation-delay:2s]" />
+        <div className="absolute bottom-[-10%] left-[30%] w-[35vw] h-[35vw] rounded-full bg-secondary/[0.05] blur-[160px] animate-pulse-glow [animation-delay:4s]" />
       </div>
 
       <Navbar />
