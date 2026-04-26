@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from "motion/react";
-import React, { useRef } from "react";
+import React from "react";
 
 type HeroProps = {
   scrollRef: React.RefObject<HTMLElement | null>;
