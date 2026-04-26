@@ -1,7 +1,4 @@
 import { motion, useScroll, useTransform } from "motion/react";
-import { ArrowUpRight, Play } from "lucide-react";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { BlurText } from "@/components/BlurText";
 import React from "react";
 
 type HeroProps = {
@@ -11,80 +8,76 @@ type HeroProps = {
 export function Hero({ scrollRef }: HeroProps) {
   const { scrollYProgress } = useScroll({
     target: scrollRef,
-    offset: ["start start", "end start"]
+    offset: ["start start", "end end"]
   });
 
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
-  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
+  // Rotates the king piece based on scroll over 400vh
+  const rotate = useTransform(scrollYProgress, [0, 1], [0, 720]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.2, 1]);
+
+  // Gestão
+  const opacity1 = useTransform(scrollYProgress, [0, 0.15, 0.25], [1, 1, 0]);
+  const y1 = useTransform(scrollYProgress, [0, 0.15, 0.25], [0, 0, -50]);
+  
+  // Estratégia
+  const opacity2 = useTransform(scrollYProgress, [0.25, 0.4, 0.5], [0, 1, 0]);
+  const y2 = useTransform(scrollYProgress, [0.25, 0.4, 0.5], [50, 0, -50]);
+
+  // Tração
+  const opacity3 = useTransform(scrollYProgress, [0.5, 0.65, 0.75], [0, 1, 0]);
+  const y3 = useTransform(scrollYProgress, [0.5, 0.65, 0.75], [50, 0, -50]);
+
+  // Escalabilidade
+  const opacity4 = useTransform(scrollYProgress, [0.75, 0.9, 1], [0, 1, 1]);
+  const y4 = useTransform(scrollYProgress, [0.75, 0.9, 1], [50, 0, 0]);
 
   return (
-    <section ref={scrollRef as any} className="relative h-[100svh] bg-background overflow-hidden">
-      <motion.div style={{ scale, opacity }} className="absolute inset-0 z-0">
-        <img 
-          src="/hero-bg.png" 
-          alt="Sayo Group Corporate Environment" 
-          className="w-full h-full object-cover"
-        />
-      </motion.div>
+    <section ref={scrollRef as any} className="relative h-[400vh] bg-background">
+      <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
+        
+        {/* Background glow */}
+        <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.03)_0%,transparent_70%)]" />
 
-      {/* Cinematic vignette */}
-      <div className="absolute inset-0 z-[1] bg-[radial-gradient(120%_80%_at_50%_60%,transparent_40%,rgba(0,0,0,0.55)_100%)]" />
-      {/* Bottom fade into next section */}
-      <div className="absolute bottom-0 inset-x-0 h-[40vh] z-[2] gradient-fade-b" />
-      
-      {/* Content */}
-      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6">
-        <motion.div initial={{opacity:0, y:12}} animate={{opacity:1, y:0}} transition={{delay:0.2}}>
-          <div className="liquid-glass rounded-full px-1 py-1 inline-flex items-center gap-2">
-            <span className="bg-foreground text-background rounded-full px-3 py-1 text-xs font-semibold">Novo</span>
-            <span className="pr-3 text-sm text-foreground/85">Seu HUB de soluções</span>
-          </div>
+        {/* 3D Interactive Chess Piece */}
+        <motion.div 
+          style={{ rotate, scale }} 
+          className="relative z-10 w-[280px] h-[280px] md:w-[450px] md:h-[450px] cursor-grab active:cursor-grabbing"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          drag
+          dragConstraints={{ left: -50, right: 50, top: -50, bottom: 50 }}
+          dragElastic={0.2}
+        >
+          <img 
+            src="/images/prompt1_1.png" 
+            alt="O Rei do Xadrez"
+            className="w-full h-full object-contain drop-shadow-[0_0_40px_rgba(255,255,255,0.1)] pointer-events-none"
+          />
         </motion.div>
 
-        <BlurText
-          text="conectando você ao sucesso."
-          as="h1"
-          className="mt-6 font-display uppercase text-[clamp(56px,9vw,144px)] leading-[0.92] tracking-[-0.02em] text-foreground max-w-[14ch]"
-          delay={0.09}
-          startDelay={0.15}
-        />
-
-        <motion.p
-          initial={{filter:"blur(10px)", opacity:0, y:16}}
-          animate={{filter:"blur(0)", opacity:1, y:0}}
-          transition={{delay:0.9, duration:0.7, ease:[0.22,1,0.36,1]}}
-          className="mt-6 font-body text-base md:text-lg text-foreground/70 max-w-xl leading-relaxed"
-        >
-          Tudo para o seu negócio escalar sem atritos.
-        </motion.p>
-
-        <motion.div
-          initial={{opacity:0, y:12}}
-          animate={{opacity:1, y:0}}
-          transition={{delay:1.1, duration:0.6}}
-          className="mt-10 flex items-center gap-3"
-        >
-          <a href="#contato" className={buttonVariants({ variant: "hero" })}>
-            Falar com Especialista <ArrowUpRight className="ml-1 size-4" />
-          </a>
-          <Button variant="heroGlass">
-            <Play className="mr-1.5 size-4 fill-current" /> Ver o filme
-          </Button>
+        {/* Scrolling Texts */}
+        <motion.div style={{ opacity: opacity1, y: y1 }} className="absolute z-20 pointer-events-none text-center px-6 mt-[22rem] md:mt-[32rem]">
+          <h2 className="font-display uppercase text-5xl md:text-7xl tracking-tight text-foreground">Gestão</h2>
+          <p className="font-body text-foreground/60 mt-4 text-lg md:text-xl max-w-[30ch]">O controle absoluto do seu tabuleiro.</p>
         </motion.div>
 
-        {/* Partners row — absolute bottom */}
-        <div className="absolute bottom-10 inset-x-0 flex flex-col items-center gap-4">
-          <span className="liquid-glass rounded-full px-4 py-1.5 text-xs font-body text-foreground/80">
-            Eles confiam em nós
-          </span>
-          <div className="flex items-center gap-8 md:gap-14 flex-wrap justify-center px-6">
-            {["Microsoft", "Amazon", "Google", "Stripe", "Vercel"].map(p => (
-              <span key={p} className="font-display italic text-xl md:text-2xl text-foreground/70 tracking-tight">
-                {p}
-              </span>
-            ))}
-          </div>
-        </div>
+        <motion.div style={{ opacity: opacity2, y: y2 }} className="absolute z-20 pointer-events-none text-center px-6 mt-[22rem] md:mt-[32rem]">
+          <h2 className="font-display uppercase text-5xl md:text-7xl tracking-tight text-foreground">Estratégia</h2>
+          <p className="font-body text-foreground/60 mt-4 text-lg md:text-xl max-w-[30ch]">Antecipe os movimentos do mercado.</p>
+        </motion.div>
+
+        <motion.div style={{ opacity: opacity3, y: y3 }} className="absolute z-20 pointer-events-none text-center px-6 mt-[22rem] md:mt-[32rem]">
+          <h2 className="font-display uppercase text-5xl md:text-7xl tracking-tight text-foreground">Tração</h2>
+          <p className="font-body text-foreground/60 mt-4 text-lg md:text-xl max-w-[30ch]">Acelere com base sólida e previsível.</p>
+        </motion.div>
+
+        <motion.div style={{ opacity: opacity4, y: y4 }} className="absolute z-20 pointer-events-none text-center px-6 mt-[22rem] md:mt-[32rem]">
+          <h2 className="font-display uppercase text-5xl md:text-7xl tracking-tight text-foreground">Escalabilidade</h2>
+          <p className="font-body text-foreground/60 mt-4 text-lg md:text-xl max-w-[30ch]">Cresça sem limites. Seu próximo xeque-mate.</p>
+        </motion.div>
+
+        {/* Transition fade to next section */}
+        <div className="absolute bottom-0 inset-x-0 h-[20vh] z-30 bg-gradient-to-t from-background to-transparent" />
       </div>
     </section>
   );

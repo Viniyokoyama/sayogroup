@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { ArrowUpRight, Workflow, Layers, Building2, Globe, Briefcase, Sparkles } from "lucide-react";
+import { Workflow, Layers, Building2, Globe, Briefcase, Sparkles } from "lucide-react";
 import { BlurText } from "@/components/BlurText";
 
 const SERVICES = [
@@ -7,40 +7,43 @@ const SERVICES = [
     icon: Workflow,
     title: "Consultoria Estratégica",
     body: "Mapeamos o cenário do seu negócio e definimos as melhores rotas para o crescimento estruturado.",
-    className: "md:row-span-2 md:col-span-1 p-8 min-h-[480px]",
-    image: "/bento-1.png"
+    className: "md:row-span-2 md:col-span-1 min-h-[480px]",
+    image: "/images/prompt2_3.png"
   },
   {
     icon: Layers,
     title: "Tecnologia",
-    body: "Implementamos sistemas robustos para modernizar suas operações diárias.",
-    className: "md:col-span-1 p-6 min-h-[228px]"
+    body: "Implementamos sistemas robustos para modernizar suas operações diárias e ganhar eficiência.",
+    className: "md:col-span-1 min-h-[260px]",
+    image: "/images/prompt2_1.png"
   },
   {
     icon: Building2,
     title: "Escritórios Virtuais",
     body: "Endereços fiscais e comerciais com gestão de correspondência impecável.",
-    className: "md:col-span-1 p-6 min-h-[228px]"
+    className: "md:col-span-1 min-h-[260px]",
+    image: "/images/prompt3_2.png"
   },
   {
     icon: Globe,
     title: "Internacionalização",
-    body: "Estruturamos sua empresa para operar globalmente com suporte contábil e jurídico.",
-    className: "md:col-span-2 p-7 min-h-[228px]",
-    image: "/bento-2.png"
+    body: "Estruturamos sua empresa para operar globalmente com total suporte.",
+    className: "md:col-span-2 min-h-[260px]",
+    image: "/images/prompt2_4.png"
   },
   {
     icon: Briefcase,
     title: "BPO Financeiro",
-    body: "Terceirização financeira inteligente para focar no seu core business.",
-    className: "md:col-span-1 p-6 min-h-[228px]"
+    body: "Terceirização financeira inteligente para você focar no seu core business.",
+    className: "md:col-span-1 min-h-[260px]",
+    image: "/images/prompt3_4.png"
   },
   {
     icon: Sparkles,
     title: "Soluções Sob Medida",
     body: "Cada negócio é único. Desenhamos serviços perfeitamente alinhados ao seu momento de expansão.",
-    className: "md:col-span-3 p-7 min-h-[200px]",
-    image: "/bento-3.png"
+    className: "md:col-span-3 min-h-[300px]",
+    image: "/images/prompt4_2.png"
   }
 ];
 
@@ -62,26 +65,42 @@ export function ServicesBento() {
         {SERVICES.map((service, i) => (
           <motion.div
             key={i}
-            className={`liquid-glass rounded-2xl relative overflow-hidden group ${service.className}`}
-            whileHover={{ y: -4 }}
-            transition={{ type: "spring", stiffness: 260, damping: 26 }}
+            className={`rounded-2xl relative overflow-hidden group cursor-pointer border border-border/10 bg-background/5 ${service.className}`}
+            whileHover={{ y: -8, scale: 0.98 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
           >
+            {/* Imagem de Fundo Interativa */}
             {service.image && (
-              <div className="absolute inset-0 z-[-1] opacity-20 group-hover:opacity-60 transition-opacity duration-700">
-                <img src={service.image} alt={service.title} className="w-full h-full object-cover mix-blend-luminosity" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
-              </div>
+              <motion.div 
+                className="absolute inset-0 z-0"
+                transition={{ duration: 0.6, ease: "easeOut" }}
+              >
+                <img 
+                  src={service.image} 
+                  alt={service.title} 
+                  className="w-full h-full object-cover opacity-60 group-hover:opacity-30 group-hover:scale-110 group-hover:rotate-2 transition-all duration-700 ease-out" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent group-hover:from-background group-hover:via-background/90 transition-all duration-700" />
+              </motion.div>
             )}
-            <div className="liquid-glass-strong rounded-full w-11 h-11 flex items-center justify-center mb-5">
-              <service.icon className="size-5 text-foreground" />
+
+            {/* Conteúdo que revela no hover */}
+            <div className="relative z-10 p-6 md:p-8 h-full flex flex-col justify-end">
+              <div className="liquid-glass-strong rounded-full w-11 h-11 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-500">
+                <service.icon className="size-5 text-foreground" />
+              </div>
+              <h3 className="font-display uppercase text-2xl md:text-3xl leading-[0.95] tracking-tight mb-3">
+                {service.title}
+              </h3>
+              
+              <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-[grid-template-rows] duration-500 ease-out">
+                <div className="overflow-hidden">
+                  <p className="font-body text-sm text-foreground/80 leading-relaxed pt-2">
+                    {service.body}
+                  </p>
+                </div>
+              </div>
             </div>
-            <h3 className="font-display uppercase text-2xl md:text-3xl leading-[0.95] tracking-tight mb-3 max-w-[18ch]">
-              {service.title}
-            </h3>
-            <p className="font-body text-sm text-foreground/65 max-w-[38ch] leading-relaxed">
-              {service.body}
-            </p>
-            <ArrowUpRight className="absolute top-6 right-6 size-5 text-foreground/30 group-hover:text-foreground/80 transition-colors" />
           </motion.div>
         ))}
       </div>
