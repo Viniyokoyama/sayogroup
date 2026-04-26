@@ -37,16 +37,32 @@ export function ScrubSequence({
     // Priority-load frame 1 so first paint is immediate
     const first = new Image();
     first.src = urls[0];
-    // @ts-ignore — fetchpriority is valid but typings lag
+    // @ts-ignore
     first.fetchPriority = "high";
     imgs[0] = first;
 
-    // Load the rest in parallel
-    urls.slice(1).forEach((src, i) => {
-      const img = new Image();
-      img.src = src;
-      imgs[i + 1] = img;
-    });
+    // Progressive loading chunk function to prevent network stall
+    let nextIndex = 1;
+    const chunkSize = 20;
+
+    const loadNextChunk = () => {
+      if (nextIndex >= urls.length) return;
+      const end = Math.min(nextIndex + chunkSize, urls.length);
+      for (let i = nextIndex; i < end; i++) {
+        const img = new Image();
+        img.src = urls[i];
+        // @ts-ignore
+        img.fetchPriority = "low"; // Hint browser to not block main resources
+        imgs[i] = img;
+      }
+      nextIndex = end;
+      // Stagger chunks to free up main thread and bandwidth
+      setTimeout(loadNextChunk, 300);
+    };
+
+    // Delay start of massive preloading to let fonts/CSS load first
+    setTimeout(loadNextChunk, 500);
+
     imagesRef.current = imgs;
   }, [framesPath, frameCount, ext]);
 
