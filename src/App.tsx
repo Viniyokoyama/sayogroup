@@ -14,6 +14,12 @@ export default function App() {
   
   return (
     <>
+      {/* Ambient Background Glows */}
+      <div className="fixed inset-0 pointer-events-none z-[-10] overflow-hidden">
+        <div className="absolute top-[-20%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-primary/10 blur-[140px] mix-blend-screen" />
+        <div className="absolute top-[40%] right-[-20%] w-[60vw] h-[60vw] rounded-full bg-primary/5 blur-[140px] mix-blend-screen" />
+      </div>
+
       <Navbar />
       <main>
         <Hero scrollRef={heroScrollRef} />

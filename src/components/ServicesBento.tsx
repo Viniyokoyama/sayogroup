@@ -7,7 +7,8 @@ const SERVICES = [
     icon: Workflow,
     title: "Consultoria Estratégica",
     body: "Mapeamos o cenário do seu negócio e definimos as melhores rotas para o crescimento estruturado.",
-    className: "md:row-span-2 md:col-span-1 p-8 min-h-[480px]"
+    className: "md:row-span-2 md:col-span-1 p-8 min-h-[480px]",
+    image: "/bento-1.png"
   },
   {
     icon: Layers,
@@ -25,7 +26,8 @@ const SERVICES = [
     icon: Globe,
     title: "Internacionalização",
     body: "Estruturamos sua empresa para operar globalmente com suporte contábil e jurídico.",
-    className: "md:col-span-2 p-7 min-h-[228px]"
+    className: "md:col-span-2 p-7 min-h-[228px]",
+    image: "/bento-2.png"
   },
   {
     icon: Briefcase,
@@ -37,7 +39,8 @@ const SERVICES = [
     icon: Sparkles,
     title: "Soluções Sob Medida",
     body: "Cada negócio é único. Desenhamos serviços perfeitamente alinhados ao seu momento de expansão.",
-    className: "md:col-span-3 p-7 min-h-[200px]"
+    className: "md:col-span-3 p-7 min-h-[200px]",
+    image: "/bento-3.png"
   }
 ];
 
@@ -63,6 +66,12 @@ export function ServicesBento() {
             whileHover={{ y: -4 }}
             transition={{ type: "spring", stiffness: 260, damping: 26 }}
           >
+            {service.image && (
+              <div className="absolute inset-0 z-[-1] opacity-20 group-hover:opacity-60 transition-opacity duration-700">
+                <img src={service.image} alt={service.title} className="w-full h-full object-cover mix-blend-luminosity" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
+              </div>
+            )}
             <div className="liquid-glass-strong rounded-full w-11 h-11 flex items-center justify-center mb-5">
               <service.icon className="size-5 text-foreground" />
             </div>
