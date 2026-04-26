@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { ScrubSequence } from "@/components/ScrubSequence";
-import { FRAMES_PATH, FRAME_COUNT } from "@/lib/constants";
+import { FRAMES_PATH, FRAME_COUNT, FRAME_EXT } from "@/lib/constants";
 import { BlurText } from "@/components/BlurText";
 import { ArrowUpRight } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
@@ -26,7 +26,7 @@ export function Hero({ scrollRef }: HeroProps) {
         
         {/* Frame Sequence */}
         <div className="absolute inset-0 z-0">
-          <ScrubSequence framesPath={FRAMES_PATH} frameCount={FRAME_COUNT} scrollTargetRef={scrollRef as any} />
+          <ScrubSequence framesPath={FRAMES_PATH} frameCount={FRAME_COUNT} ext={FRAME_EXT} scrollTargetRef={scrollRef as any} />
         </div>
 
         {/* Cinematic vignette */}
