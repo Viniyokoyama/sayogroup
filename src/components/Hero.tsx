@@ -1,4 +1,5 @@
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from "motion/react";
+import { motion, useScroll, useTransform } from "motion/react";
+import { ScrubSequence } from "@/components/ScrubSequence";
 import React from "react";
 
 type HeroProps = {
@@ -10,34 +11,6 @@ export function Hero({ scrollRef }: HeroProps) {
     target: scrollRef,
     offset: ["start start", "end end"]
   });
-
-  // Rotates the king piece in 3D (Y axis) based on scroll
-  const rotateYScroll = useTransform(scrollYProgress, [0, 1], [0, 720]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.2, 1]);
-
-  // Tilt interativo com o mouse
-  const mouseX = useMotionValue(0.5);
-  const mouseY = useMotionValue(0.5);
-  
-  const springConfig = { damping: 30, stiffness: 200, mass: 1 };
-  const smoothMouseX = useSpring(mouseX, springConfig);
-  const smoothMouseY = useSpring(mouseY, springConfig);
-
-  const rotateXMouse = useTransform(smoothMouseY, [0, 1], [15, -15]);
-  const rotateYMouse = useTransform(smoothMouseX, [0, 1], [-15, 15]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width;
-    const y = (e.clientY - rect.top) / rect.height;
-    mouseX.set(x);
-    mouseY.set(y);
-  };
-
-  const handleMouseLeave = () => {
-    mouseX.set(0.5);
-    mouseY.set(0.5);
-  };
 
   // Gestão
   const opacity1 = useTransform(scrollYProgress, [0, 0.15, 0.25], [1, 1, 0]);
@@ -59,54 +32,31 @@ export function Hero({ scrollRef }: HeroProps) {
     <section ref={scrollRef as any} className="relative h-[400vh] bg-background">
       <div className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden">
         
-        {/* Background glow */}
-        <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.03)_0%,transparent_70%)]" />
-
-        {/* 3D Interactive Chess Piece Wrapper */}
-        <div 
-          className="relative z-10 w-[280px] h-[280px] md:w-[450px] md:h-[450px]"
-          style={{ perspective: "1200px" }}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-        >
-          <motion.div 
-            style={{ 
-              rotateY: rotateYScroll, 
-              scale,
-              transformStyle: "preserve-3d"
-            }} 
-            className="w-full h-full flex items-center justify-center"
-          >
-            {/* The actual image tilting to the mouse */}
-            <motion.img 
-              style={{
-                rotateX: rotateXMouse,
-                rotateY: rotateYMouse,
-              }}
-              src="/images/prompt1_1.png" 
-              alt="O Rei do Xadrez"
-              className="w-full h-full object-contain drop-shadow-[0_0_40px_rgba(255,255,255,0.15)] mix-blend-screen pointer-events-none"
-            />
-          </motion.div>
+        {/* Frame Sequence Animation (EZgif frames) */}
+        <div className="absolute inset-0 z-0">
+          <ScrubSequence />
         </div>
 
+        {/* Dark radial glow to blend the text with the video */}
+        <div className="absolute inset-0 z-[1] bg-[radial-gradient(120%_80%_at_50%_60%,transparent_40%,rgba(0,0,0,0.55)_100%)]" />
+
         {/* Scrolling Texts */}
-        <motion.div style={{ opacity: opacity1, y: y1 }} className="absolute z-20 pointer-events-none text-center px-6 mt-[22rem] md:mt-[32rem]">
+        <motion.div style={{ opacity: opacity1, y: y1 }} className="absolute z-20 pointer-events-none text-center px-6 mt-64 md:mt-80">
           <h2 className="font-display uppercase text-5xl md:text-7xl tracking-tight text-foreground">Gestão</h2>
           <p className="font-body text-foreground/60 mt-4 text-lg md:text-xl max-w-[30ch]">O controle absoluto do seu tabuleiro.</p>
         </motion.div>
 
-        <motion.div style={{ opacity: opacity2, y: y2 }} className="absolute z-20 pointer-events-none text-center px-6 mt-[22rem] md:mt-[32rem]">
+        <motion.div style={{ opacity: opacity2, y: y2 }} className="absolute z-20 pointer-events-none text-center px-6 mt-64 md:mt-80">
           <h2 className="font-display uppercase text-5xl md:text-7xl tracking-tight text-foreground">Estratégia</h2>
           <p className="font-body text-foreground/60 mt-4 text-lg md:text-xl max-w-[30ch]">Antecipe os movimentos do mercado.</p>
         </motion.div>
 
-        <motion.div style={{ opacity: opacity3, y: y3 }} className="absolute z-20 pointer-events-none text-center px-6 mt-[22rem] md:mt-[32rem]">
+        <motion.div style={{ opacity: opacity3, y: y3 }} className="absolute z-20 pointer-events-none text-center px-6 mt-64 md:mt-80">
           <h2 className="font-display uppercase text-5xl md:text-7xl tracking-tight text-foreground">Tração</h2>
           <p className="font-body text-foreground/60 mt-4 text-lg md:text-xl max-w-[30ch]">Acelere com base sólida e previsível.</p>
         </motion.div>
 
-        <motion.div style={{ opacity: opacity4, y: y4 }} className="absolute z-20 pointer-events-none text-center px-6 mt-[22rem] md:mt-[32rem]">
+        <motion.div style={{ opacity: opacity4, y: y4 }} className="absolute z-20 pointer-events-none text-center px-6 mt-64 md:mt-80">
           <h2 className="font-display uppercase text-5xl md:text-7xl tracking-tight text-foreground">Escalabilidade</h2>
           <p className="font-body text-foreground/60 mt-4 text-lg md:text-xl max-w-[30ch]">Cresça sem limites. Seu próximo xeque-mate.</p>
         </motion.div>

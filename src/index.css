@@ -47,10 +47,10 @@
 
 :root {
   /* Raw palette (HSL triplets — no hsl() wrapper, so we can do alpha in Tailwind) */
-  --ink:    20 15% 9%;
-  --cream:  40 30% 90%;
-  --ochre:  32 55% 65%;
-  --terra:  14 55% 31%;
+  --ink:    250 10% 8%;
+  --cream:  260 20% 92%;
+  --ochre:  260 55% 65%;
+  --terra:  270 50% 35%;
 
   /* Semantic tokens */
   --background:        var(--ink);
