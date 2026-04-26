@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { ScrubSequence } from "@/components/ScrubSequence";
+import { FRAMES_PATH, FRAME_COUNT } from "@/lib/constants";
 import React from "react";
 
 type HeroProps = {
@@ -34,7 +35,7 @@ export function Hero({ scrollRef }: HeroProps) {
         
         {/* Frame Sequence Animation (EZgif frames) */}
         <div className="absolute inset-0 z-0">
-          <ScrubSequence />
+          <ScrubSequence framesPath={FRAMES_PATH} frameCount={FRAME_COUNT} scrollTargetRef={scrollRef as any} />
         </div>
 
         {/* Dark radial glow to blend the text with the video */}
