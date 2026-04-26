@@ -55,7 +55,7 @@ export function ScrubSequence({
     const canvas = canvasRef.current;
     if (!canvas) return;
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = 1; // Keep 1:1 ratio for best quality with smaller source frames
       canvas.width  = window.innerWidth  * dpr;
       canvas.height = window.innerHeight * dpr;
       canvas.style.width  = "100%";
