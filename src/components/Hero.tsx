@@ -1,5 +1,5 @@
-import { motion, useScroll, useTransform } from "motion/react";
-import React from "react";
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from "motion/react";
+import React, { useRef } from "react";
 
 type HeroProps = {
   scrollRef: React.RefObject<HTMLElement | null>;
@@ -11,9 +11,33 @@ export function Hero({ scrollRef }: HeroProps) {
     offset: ["start start", "end end"]
   });
 
-  // Rotates the king piece based on scroll over 400vh
-  const rotate = useTransform(scrollYProgress, [0, 1], [0, 720]);
+  // Rotates the king piece in 3D (Y axis) based on scroll
+  const rotateYScroll = useTransform(scrollYProgress, [0, 1], [0, 720]);
   const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.2, 1]);
+
+  // Tilt interativo com o mouse
+  const mouseX = useMotionValue(0.5);
+  const mouseY = useMotionValue(0.5);
+  
+  const springConfig = { damping: 30, stiffness: 200, mass: 1 };
+  const smoothMouseX = useSpring(mouseX, springConfig);
+  const smoothMouseY = useSpring(mouseY, springConfig);
+
+  const rotateXMouse = useTransform(smoothMouseY, [0, 1], [15, -15]);
+  const rotateYMouse = useTransform(smoothMouseX, [0, 1], [-15, 15]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    mouseX.set(x);
+    mouseY.set(y);
+  };
+
+  const handleMouseLeave = () => {
+    mouseX.set(0.5);
+    mouseY.set(0.5);
+  };
 
   // Gestão
   const opacity1 = useTransform(scrollYProgress, [0, 0.15, 0.25], [1, 1, 0]);
@@ -38,22 +62,33 @@ export function Hero({ scrollRef }: HeroProps) {
         {/* Background glow */}
         <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.03)_0%,transparent_70%)]" />
 
-        {/* 3D Interactive Chess Piece */}
-        <motion.div 
-          style={{ rotate, scale }} 
-          className="relative z-10 w-[280px] h-[280px] md:w-[450px] md:h-[450px] cursor-grab active:cursor-grabbing"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          drag
-          dragConstraints={{ left: -50, right: 50, top: -50, bottom: 50 }}
-          dragElastic={0.2}
+        {/* 3D Interactive Chess Piece Wrapper */}
+        <div 
+          className="relative z-10 w-[280px] h-[280px] md:w-[450px] md:h-[450px]"
+          style={{ perspective: "1200px" }}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
         >
-          <img 
-            src="/images/prompt1_1.png" 
-            alt="O Rei do Xadrez"
-            className="w-full h-full object-contain drop-shadow-[0_0_40px_rgba(255,255,255,0.1)] pointer-events-none"
-          />
-        </motion.div>
+          <motion.div 
+            style={{ 
+              rotateY: rotateYScroll, 
+              scale,
+              transformStyle: "preserve-3d"
+            }} 
+            className="w-full h-full flex items-center justify-center"
+          >
+            {/* The actual image tilting to the mouse */}
+            <motion.img 
+              style={{
+                rotateX: rotateXMouse,
+                rotateY: rotateYMouse,
+              }}
+              src="/images/prompt1_1.png" 
+              alt="O Rei do Xadrez"
+              className="w-full h-full object-contain drop-shadow-[0_0_40px_rgba(255,255,255,0.15)] mix-blend-screen pointer-events-none"
+            />
+          </motion.div>
+        </div>
 
         {/* Scrolling Texts */}
         <motion.div style={{ opacity: opacity1, y: y1 }} className="absolute z-20 pointer-events-none text-center px-6 mt-[22rem] md:mt-[32rem]">
